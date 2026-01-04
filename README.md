@@ -153,21 +153,7 @@ and likewise for the buy/sell pressure figure (use a different filename). Create
    ```
 4. Expect a printed "Calibrated sensitivity: <value>" and 4 plotted figures (2 for calibrated run, 2 for the high-sentiment scenario).
 
----
 
-## Development notes & suggestions
-
-- The repository currently lacks CLI parsing — consider adding argparse flags (input paths, grid ranges, n_agents, frac_behavioral, output directory) to `calibrated_and_run_final`.
-- Consider adding file-saving behavior for reproducible runs and CI-friendly outputs.
-- Add `requirements.txt` and a `LICENSE` file if you want to publish.
-
-- Inspect the exact contents of `src/bubble_market_abm_final.py` and `src/calibrated_and_run_final` and update this README to include exact command-line arguments, required packages, and sample outputs; or
-
-If you want, I can:
-- Update the `visualize` method to save figures to `results/` and commit the change.
-- Add a thin CLI wrapper around `calibrated_and_run_final` with flags for input file paths and output directory, and commit `requirements.txt`.
-
----
 
 ## Contact
 
