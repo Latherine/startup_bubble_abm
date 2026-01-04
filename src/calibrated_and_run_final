@@ -1,0 +1,79 @@
+
+import numpy as np
+from bubble_market_abm_final import (
+    create_market,
+    load_data
+)
+
+# =========================
+# Calibration
+# =========================
+def calibrate_sensitivity(price_series, fundamental,
+                           sensitivity_grid,
+                           n_agents=100,
+                           frac_behavioral=0.6):
+
+    target_peak = max(price_series)
+    errors = []
+
+    for s in sensitivity_grid:
+        market = create_market(
+            n_agents=n_agents,
+            frac_behavioral=frac_behavioral,
+            sensitivity=s,
+            initial_price=price_series[0],
+            fundamental=fundamental
+        )
+
+        market.run(len(price_series))
+        simulated_peak = max(market.price_history)
+        error = abs(simulated_peak - target_peak)
+
+        errors.append((s, error))
+
+    errors.sort(key=lambda x: x[1])
+    return errors
+
+
+# =========================
+# MAIN EXECUTION
+# =========================
+if __name__ == "__main__":
+
+    # Load Project 3 data
+    price_series, fundamental = load_data()
+
+    # ---- Calibration run ----
+    sensitivity_grid = np.linspace(0.01, 0.2, 20)
+    results = calibrate_sensitivity(
+        price_series,
+        fundamental,
+        sensitivity_grid
+    )
+
+    best_sensitivity = results[0][0]
+    print("Calibrated sensitivity:", best_sensitivity)
+
+    # ---- Calibrated normal run ----
+    calibrated_market = create_market(
+        n_agents=100,
+        frac_behavioral=0.6,
+        sensitivity=best_sensitivity,
+        initial_price=price_series[0],
+        fundamental=fundamental
+    )
+
+    calibrated_market.run(len(price_series))
+    calibrated_market.visualize("(Calibrated Run)")
+
+    # ---- Scenario simulation ----
+    scenario_market = create_market(
+        n_agents=100,
+        frac_behavioral=0.8,  # more behavioral investors
+        sensitivity=best_sensitivity,
+        initial_price=price_series[0],
+        fundamental=fundamental
+    )
+
+    scenario_market.run(len(price_series))
+    scenario_market.visualize("(High Sentiment Scenario)")
