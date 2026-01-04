@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random
 
+
 # =========================
 # Investor Agent
 # =========================
@@ -102,8 +103,8 @@ class Market:
 # Project 3 Data Loader
 # =========================
 def load_data():
-    funding = pd.read_csv("funding_rounds.csv")
-    acquisitions = pd.read_csv("acquisitions.csv")
+    funding = pd.read_csv("../data/funding_rounds.csv")
+    acquisitions = pd.read_csv("../data/acquisitions.csv")
 
     for _, row in acquisitions.iterrows():
         target_id = row["acquired_object_id"]
